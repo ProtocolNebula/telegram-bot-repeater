@@ -48,6 +48,10 @@ function isAdmin(ctx) {
 }
 
 app.use(commandParts());
+
+/**
+ * Parse the commands and check admin permissions
+ */
 app.use((ctx, next) => {
     try {
         if (ctx) {
@@ -60,19 +64,20 @@ app.use((ctx, next) => {
                         case "set":
                             setMessage(ctx)
                             break;
+                        default:
+                            return next()
                     }
                 }
             }).catch((error) => {
-                ctx.reply("Only admins can set the message")
+                ctx.reply("Only admins can use the bot")
             })
-            
-            
-        } 
+        } else {
+            return next()
+        }
     } catch (ex) {
-        console.log(ex)
+        console.log('Parsing commands: ' + ex)
+        return
     }
-    
-    return next()
 });
 
 
