@@ -55,7 +55,7 @@ app.use(commandParts());
 app.use((ctx, next) => {
     try {
         if (ctx) {
-            isAdmin(ctx).then((res) => {x
+            isAdmin(ctx).then((res) => {
                 if ('command' in ctx.contextState) {
                     switch (ctx.contextState.command.command) {
                         case "stop":
