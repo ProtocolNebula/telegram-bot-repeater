@@ -52,7 +52,6 @@ app.use((ctx, next) => {
     try {
         if (ctx) {
             isAdmin(ctx).then((res) => {
-                console.log(ctx.contextState)
                 if ('command' in ctx.contextState) {
                     switch (ctx.contextState.command.command) {
                         case "stop":
@@ -75,6 +74,8 @@ app.use((ctx, next) => {
     
     return next()
 });
+
+
   
 app.command('start', (ctx) => {
     ctx.reply('Add this bot to your group and make a repeat string with:\n' +
@@ -129,15 +130,29 @@ function setMessage(ctx) {
 
 app.startPolling()
 
-setInterval(function() {
+async function executeInterval() {
     const currentTime = Math.floor(Date.now())
     for (let chat in ActiveChats) {
-        console.log("Enviando a " + chat)
+        //console.log("Checking sending to " + chat)
         try {
-            ActiveChats[chat].sendMessage(currentTime)   
+            await ActiveChats[chat].sendMessage(currentTime)   
         }
         catch (exception) {
-            console.log(exception)
+            //console.log(exception)
+            switch (exception.response.error_code) {
+                case 403:
+                    // Bot kicked
+                    delete ActiveChats[chat]
+                    console.log('Bot was kicked from chat ' + chat)
+                    break;
+            }
         }
     }
-}, config.SECONDS_CYCLE * 1000)
+}
+
+process.on('unhandledRejection', error => {
+    // TODO: Make code compatible to not  launch this code when bot is kicked or something
+  console.log('unhandledRejection', error.message);
+});
+
+setInterval(executeInterval, config.SECONDS_CYCLE * 1000)

@@ -15,10 +15,10 @@ class Chat {
         this.sendMessage(Math.floor(Date.now()))
     }
     
-    sendMessage(curDate) {
+    async sendMessage(curDate) {
         if (curDate > this.nextsend) {
             this.nextsend = curDate + this.lapseseconds * 1000
-            this.context.reply(this.message)
+            await this.context.reply(this.message)
             
             //console.log("Sending..." + this.message)
         }
