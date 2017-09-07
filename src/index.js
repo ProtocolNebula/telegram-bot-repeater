@@ -15,12 +15,12 @@ app.telegram.getMe().then((botInfo) => {
 
 app.use(commandParts());
 app.use((ctx, next) => {
-    console.log(ctx.update.message.from);
+    //console.log(ctx.update.message.from);
     if (ctx.update.message.from.id != "13061540") {
         return;
     }
-    console.log(ctx.update.message.from)
-    console.log(ctx.update.message.chat)
+    //console.log(ctx.update.message.from)
+    //console.log(ctx.update.message.chat)
     if ('command' in ctx.contextState) {
         switch (ctx.contextState.command.command) {
             case "stop":
