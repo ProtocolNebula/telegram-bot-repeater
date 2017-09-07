@@ -69,7 +69,8 @@ app.use((ctx, next) => {
                     }
                 }
             }).catch((error) => {
-                ctx.reply("Only admins can use the bot")
+                //ctx.reply("Only admins can use the bot")
+                console.log("Error reading command: " , error)
             })
         } else {
             return next()
