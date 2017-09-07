@@ -1,0 +1,32 @@
+{
+  "name": "telegram-bot-repeater",
+  "version": "1.0.0",
+  "description": "A repeater text bot for telegram with telegraf",
+  "main": "src/index.js",
+  "dependencies": {
+    "telegraf": "^3.10.1",
+    "telegraf-command-parts": "^1.0.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ProtocolNebula/telegram-bot-repeater.git"
+  },
+  "keywords": [
+    "telegraf",
+    "telegram",
+    "bot",
+    "repeater",
+    "group"
+  ],
+  "author": "Ruben Arroyo (ProtocolNebula)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ProtocolNebula/telegram-bot-repeater/issues"
+  },
+  "homepage": "https://github.com/ProtocolNebula/telegram-bot-repeater#readme"
+}
