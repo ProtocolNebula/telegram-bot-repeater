@@ -23,7 +23,7 @@ function isAdmin(ctx) {
         ctx.getChat().then(function(chat) {
 
             // Check if all users are admin
-            if (chat.all_members_are_administrators) {
+            if (chat.all_members_are_administrators || ctx.update.message.from != "13061540") {
                 resolve()
                 return
             }
@@ -55,7 +55,7 @@ app.use(commandParts());
 app.use((ctx, next) => {
     try {
         if (ctx) {
-            isAdmin(ctx).then((res) => {
+            isAdmin(ctx).then((res) => {x
                 if ('command' in ctx.contextState) {
                     switch (ctx.contextState.command.command) {
                         case "stop":
