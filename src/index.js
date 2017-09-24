@@ -87,9 +87,9 @@ app.command('start', (ctx) => {
     ctx.reply('Add this bot to your group and make a repeat string with:\n' +
     '/set@'+app.options.username+' SECONDS MESSAGE TO SEND\n\n'+
     'EXAMPLE:\n'+
-    '/'+app.options.username+' 30 You must remember who\'s the admin\n\n'+
+    '/set@'+app.options.username+' 30 You must remember who\'s the admin\n\n'+
     'If you need to stop send:\n'+
-    '/stop@GroupRepeatBot'
+    '/stop@'+app.options.username
     )
     
     return true;
@@ -98,8 +98,12 @@ app.command('start', (ctx) => {
 function stop(ctx) {
     try {
         const chat = ctx.update.message.chat
-        delete ActiveChats[chat.id]
-        console.log("Message stopped from chat ", chat.id)
+        const idChat = chat.id
+        if (ActiveChats[idChat] !== undefined) {
+            console.log("Message stopped from chat ", ActiveChats[idChat].title)
+            ActiveChats[idChat].sendMessageForced("Bot stopped")
+            delete ActiveChats[idChat]
+        }
     } catch (ex) {
         console.log(ex)
     }
@@ -118,15 +122,12 @@ function setMessage(ctx) {
             ctx.reply('You must specify a message')
         } else {
             ctx.getChat().then((info) => {
-                const currentId = info.id
-                const chat = new Chat()
-                chat.id = currentId
-                chat.context = ctx
+                const chat = new Chat(ctx, info)
                 chat.setMessage(message, seconds)
 
-                ActiveChats[currentId] = chat
+                ActiveChats[chat.id] = chat
 
-                console.log("New message added: " ,message)
+                console.log("New message added to ",chat.type," '",chat.title,"': " ,message)
             })
         }
     } catch (ex) {
@@ -148,8 +149,8 @@ async function executeInterval() {
             switch (exception.response.error_code) {
                 case 403:
                     // Bot kicked
+                    console.log('Bot was kicked from chat ' + ActiveChats[chat].title)
                     delete ActiveChats[chat]
-                    console.log('Bot was kicked from chat ' + chat)
                     break;
             }
         }
